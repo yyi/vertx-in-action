@@ -26,15 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(VertxExtension.class)
 @DisplayName("Kafka event processing tests")
-@Testcontainers
+//@Testcontainers
 class EventProcessingTest {
 
-  @Container
+ /* @Container
   private static final DockerComposeContainer CONTAINERS = new DockerComposeContainer(new File("../docker-compose.yml"))
     .withExposedService("postgres_1", 5432)
     .withExposedService("mongo_1", 27017)
     .withExposedService("kafka_1", 9092);
-
+*/
   private KafkaConsumer<String, JsonObject> consumer;
   private KafkaProducer<String, JsonObject> producer;
 
@@ -47,8 +47,8 @@ class EventProcessingTest {
     PgPool pgPool = PgPool.pool(vertx, PgConfig.pgConnectOpts(), new PoolOptions());
     pgPool.query("DELETE FROM stepevent")
       .rxExecute()
-      .flatMapCompletable(rs -> adminClient.rxDeleteTopics(Arrays.asList("incoming.steps", "daily.step.updates")))
-      .andThen(Completable.fromAction(pgPool::close))
+  //    .flatMapCompletable(rs -> adminClient.rxDeleteTopics(Arrays.asList("incoming.steps", "daily.step.updates")))
+      .flatMapCompletable(rs->Completable.fromAction(pgPool::close))
       .onErrorComplete()
       .subscribe(
         testContext::completeNow,

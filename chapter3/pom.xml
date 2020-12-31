@@ -49,7 +49,7 @@
     </dependency>
 
     <dependency>
-      <groupId>io.vertx</groupId>
+      <groupId>io.vertx</groupId>x
       <artifactId>vertx-junit5</artifactId>
       <version>${vertx.version}</version>
       <scope>test</scope>

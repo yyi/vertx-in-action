@@ -4,6 +4,8 @@ import io.vertx.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Random;
+
 public class Offload extends AbstractVerticle {
 
   private final Logger logger = LoggerFactory.getLogger(Offload.class);
@@ -11,7 +13,10 @@ public class Offload extends AbstractVerticle {
   @Override
   public void start() {
     vertx.setPeriodic(5000, id -> {
-      logger.info("Tick");
+      Context context = vertx.getOrCreateContext();
+      context.put("key", new Random().nextInt());
+      logger.info("Tick {}", (Object) context.get("key"));
+
       vertx.executeBlocking(this::blockingCode, this::resultHandler);
     });
   }
@@ -19,8 +24,9 @@ public class Offload extends AbstractVerticle {
   private void blockingCode(Promise<String> promise) {
     logger.info("Blocking code running");
     try {
+      Context context = vertx.getOrCreateContext();
       Thread.sleep(4000);
-      logger.info("Done!");
+      logger.info("Done!" + context.get("key"));
       promise.complete("Ok!");
     } catch (InterruptedException e) {
       promise.fail(e);
@@ -29,7 +35,8 @@ public class Offload extends AbstractVerticle {
 
   private void resultHandler(AsyncResult<String> ar) {
     if (ar.succeeded()) {
-      logger.info("Blocking code result: {}", ar.result());
+      Context context = vertx.getOrCreateContext();
+      logger.info("Blocking code result: {} {}", ar.result(), context.get("key"));
     } else {
       logger.error("Woops", ar.cause());
     }
@@ -37,6 +44,8 @@ public class Offload extends AbstractVerticle {
 
   public static void main(String[] args) {
     Vertx vertx = Vertx.vertx();
-    vertx.deployVerticle(new Offload());
+    DeploymentOptions opts = new DeploymentOptions()
+      .setInstances(5);
+    vertx.deployVerticle("chapter2.execblocking.Offload", opts);
   }
 }

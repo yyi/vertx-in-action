@@ -11,6 +11,7 @@ import io.vertx.kotlin.core.json.array
 import io.vertx.kotlin.core.json.json
 import io.vertx.kotlin.core.json.obj
 import io.vertx.kotlin.coroutines.CoroutineVerticle
+import io.vertx.kotlin.coroutines.await
 import io.vertx.kotlin.ext.web.client.sendAwait
 import io.vertx.kotlin.ext.web.client.sendJsonAwait
 import kotlinx.coroutines.async
@@ -27,7 +28,7 @@ class CollectorService : CoroutineVerticle() {
     webClient = WebClient.create(vertx)
     vertx.createHttpServer()
       .requestHandler(this::handleRequest)
-      .listenAwait(8080)
+      .listen(8080).await()
   }
 
   private fun handleRequest(request: HttpServerRequest) {
@@ -57,7 +58,7 @@ class CollectorService : CoroutineVerticle() {
       .get(port, "localhost", "/")
       .expect(ResponsePredicate.SC_SUCCESS)
       .`as`(BodyCodec.jsonObject())
-      .sendAwait()
+      .send().await()
       .body()
   }
 
@@ -65,6 +66,6 @@ class CollectorService : CoroutineVerticle() {
     webClient
       .post(4000, "localhost", "/")
       .expect(ResponsePredicate.SC_SUCCESS)
-      .sendJsonAwait(json)
+      .sendJson(json).await()
   }
 }

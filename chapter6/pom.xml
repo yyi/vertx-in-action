@@ -14,7 +14,7 @@
     <vertx.version>4.0.0</vertx.version>
     <logback-classic.version>1.2.3</logback-classic.version>
     <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
-    <junit.jupiter.version>5.6.2</junit.jupiter.version>
+    <junit.jupiter.version>5.7.0</junit.jupiter.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <mainClass>chapter6.RxProxyClient</mainClass>
     <assertj-core.version>3.11.1</assertj-core.version>
@@ -60,7 +60,7 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-rx-java2-gen</artifactId>
       <version>${vertx.version}</version>
-      <scope>provided</scope>
+      <!--<scope>provided</scope>-->
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -125,6 +125,14 @@
               <value>io.vertx.core.logging.SLF4JLogDelegateFactory</value>
             </systemProperty>
           </systemProperties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <mainClass>chapter6.RxProxyClient</mainClass>
         </configuration>
       </plugin>
     </plugins>

@@ -17,7 +17,10 @@ public class RxProxyClient extends AbstractVerticle {
       .delaySubscription(3, TimeUnit.SECONDS, RxHelper.scheduler(vertx))
       .repeat()
       .map(data -> "avg = " + data.getDouble("average"))
-      .subscribe(System.out::println);
+      .subscribe(t -> System.out.println(t));
+
+    service.average(j -> System.out.println("_______" + j.toString()));
+
   }
 
   public static void main(String[] args) {

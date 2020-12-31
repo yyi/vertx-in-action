@@ -36,13 +36,13 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(VertxExtension.class)
-@Testcontainers
+//@Testcontainers
 class IntegrationTest {
 
-  @Container
+  /*@Container
   private static final DockerComposeContainer CONTAINERS = new DockerComposeContainer(new File("../docker-compose.yml"))
     .withExposedService("artemis_1", 5672)
-    .withExposedService("kafka_1", 9092);
+    .withExposedService("kafka_1", 9092);*/
 
   private static RequestSpecification requestSpecification;
 
@@ -71,8 +71,8 @@ class IntegrationTest {
     return new AmqpClientOptions()
       .setHost("localhost")
       .setPort(5672)
-      .setUsername("artemis")
-      .setPassword("simetraehcapa");
+      .setUsername("admin")
+      .setPassword("admin");
   }
 
   private AmqpClient amqpClient;
@@ -85,9 +85,9 @@ class IntegrationTest {
     vertx
       .rxDeployVerticle(new IngesterVerticle())
       .delay(500, TimeUnit.MILLISECONDS, RxHelper.scheduler(vertx))
-      .flatMapCompletable(id -> adminClient.rxDeleteTopics(singletonList("incoming.steps")))
-      .onErrorComplete()
-      .subscribe(testContext::completeNow, testContext::failNow);
+//      .flatMapCompletable(id -> adminClient.rxDeleteTopics(singletonList("incoming.steps")))
+//      .onErrorComplete()
+      .subscribe(t -> testContext.completeNow(), testContext::failNow);
   }
 
   @Test

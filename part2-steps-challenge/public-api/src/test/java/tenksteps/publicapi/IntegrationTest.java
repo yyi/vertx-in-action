@@ -36,14 +36,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Integration tests for the public API")
-@Testcontainers
+//@Testcontainers
 class IntegrationTest {
 
-  @Container
-  private static final DockerComposeContainer CONTAINERS = new DockerComposeContainer(new File("../docker-compose.yml"))
-    .withExposedService("postgres_1", 5432)
-    .withExposedService("mongo_1", 27017)
-    .withExposedService("kafka_1", 9092);
+//  @Container
+//  private static final DockerComposeContainer CONTAINERS = new DockerComposeContainer(new File("../docker-compose.yml"))
+//    .withExposedService("postgres_1", 5432)
+//    .withExposedService("mongo_1", 27017)
+//    .withExposedService("kafka_1", 9092);
 
   private RequestSpecification requestSpecification;
 
@@ -65,7 +65,7 @@ class IntegrationTest {
       .setHost("localhost")
       .setDatabase("postgres")
       .setUser("postgres")
-      .setPassword("vertx-in-action"), new PoolOptions());
+      .setPassword("yangyi"), new PoolOptions());
 
     pgPool.preparedQuery(insertQuery)
       .rxExecuteBatch(data)

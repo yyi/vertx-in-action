@@ -37,6 +37,7 @@ public class MixedThreading extends AbstractVerticle {
     logger.info("Waiting on the countdown latch...");
     latch.await();
     logger.info("Bye!");
+    vertx.close();
   }
 
   public static void main(String[] args) {

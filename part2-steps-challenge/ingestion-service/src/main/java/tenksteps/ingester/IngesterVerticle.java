@@ -65,8 +65,8 @@ public class IngesterVerticle extends AbstractVerticle {
     return new AmqpClientOptions()
       .setHost("localhost")
       .setPort(5672)
-      .setUsername("artemis")
-      .setPassword("simetraehcapa");
+      .setUsername("admin")
+      .setPassword("admin");
   }
 
   Map<String, String> kafkaConfig() {

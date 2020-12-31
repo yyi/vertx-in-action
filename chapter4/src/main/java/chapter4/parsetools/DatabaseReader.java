@@ -12,15 +12,16 @@ public class DatabaseReader {
 
   private static final Logger logger = LoggerFactory.getLogger(DatabaseReader.class);
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
     Vertx vertx = Vertx.vertx();
 
     AsyncFile file = vertx.fileSystem().openBlocking("sample.db",
-      new OpenOptions().setRead(true));
-
+      new OpenOptions().setRead(true).setCreate(false));
+    file.exceptionHandler(t -> t.printStackTrace());
     RecordParser parser = RecordParser.newFixed(4, file);
     parser.handler(header -> readMagicNumber(header, parser));
     parser.endHandler(v -> vertx.close());
+    Thread.sleep(1000);
   }
 
   private static void readMagicNumber(Buffer header, RecordParser parser) {
