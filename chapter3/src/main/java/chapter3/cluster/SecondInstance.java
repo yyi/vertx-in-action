@@ -4,7 +4,10 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +16,8 @@ public class SecondInstance {
   private static final Logger logger = LoggerFactory.getLogger(SecondInstance.class);
 
   public static void main(String[] args) {
-    Vertx.clusteredVertx(new VertxOptions(), ar -> {
+    ClusterManager mgr = new ZookeeperClusterManager();
+    Vertx.clusteredVertx(new VertxOptions().setClusterManager(mgr).setEventBusOptions(new EventBusOptions().setPort(12346)), ar -> {
       if (ar.succeeded()) {
         logger.info("Second instance has been started");
         Vertx vertx = ar.result();
